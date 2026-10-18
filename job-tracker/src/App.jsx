@@ -1,41 +1,46 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 
 function App() {
-  const [jobs, setJobs] = useState([
-    { id: 1, company: 'Google', role: 'Frontend Engineer', status: 'Applied' },
-    { id: 2, company: 'Meta', role: 'Full Stack Developer', status: 'Interviewing' },
-  ])
-
+  const [jobs, setJobs] = useState([])
   const [company, setCompany] = useState('')
   const [role, setRole] = useState('')
 
-  function handleSubmit(e) {
+  // Fetch jobs from the server when the page loads
+  useEffect(() => {
+    fetch('http://localhost:5000/api/jobs')
+      .then((res) => res.json())
+      .then((data) => setJobs(data))
+  }, [])
+
+  async function handleSubmit(e) {
     e.preventDefault()
     if (!company.trim() || !role.trim()) return
 
-    const newJob = {
-      id: Date.now(),
-      company: company.trim(),
-      role: role.trim(),
-      status: 'Applied',
-    }
-
+    const response = await fetch('http://localhost:5000/api/jobs', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ company, role }),
+    })
+    
+    const newJob = await response.json()
     setJobs([newJob, ...jobs])
     setCompany('')
     setRole('')
   }
 
-  function handleDelete(id) {
+  async function handleDelete(id) {
+    await fetch(`http://localhost:5000/api/jobs/${id}`, { method: 'DELETE' })
     setJobs(jobs.filter((job) => job.id !== id))
   }
 
-  function handleStatusChange(id, newStatus) {
-    setJobs(
-      jobs.map((job) =>
-        job.id === id ? { ...job, status: newStatus } : job
-      )
-    )
+  async function handleStatusChange(id, newStatus) {
+    await fetch(`http://localhost:5000/api/jobs/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: newStatus }),
+    })
+    setJobs(jobs.map((job) => job.id === id ? { ...job, status: newStatus } : job))
   }
 
   return (
