@@ -8,7 +8,7 @@ function App() {
 
   // Fetch jobs from the server when the page loads
   useEffect(() => {
-    fetch('http://localhost:5000/api/jobs')
+    fetch('https://job-tracker-c4jo.onrender.com/api/jobs')
       .then((res) => res.json())
       .then((data) => setJobs(data))
   }, [])
@@ -17,7 +17,7 @@ function App() {
     e.preventDefault()
     if (!company.trim() || !role.trim()) return
 
-    const response = await fetch('http://localhost:5000/api/jobs', {
+    const response = await fetch('https://job-tracker-c4jo.onrender.com/api/jobs', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ company, role }),
@@ -30,12 +30,12 @@ function App() {
   }
 
   async function handleDelete(id) {
-    await fetch(`http://localhost:5000/api/jobs/${id}`, { method: 'DELETE' })
+    await fetch(`https://job-tracker-c4jo.onrender.com/api/jobs/${id}`, { method: 'DELETE' })
     setJobs(jobs.filter((job) => job.id !== id))
   }
 
   async function handleStatusChange(id, newStatus) {
-    await fetch(`http://localhost:5000/api/jobs/${id}`, {
+    await fetch(`https://job-tracker-c4jo.onrender.com/api/jobs/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status: newStatus }),
