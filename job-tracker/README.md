@@ -1,16 +1,27 @@
-# React + Vite
+# Job Tracker - Full Stack Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A full-stack job application tracker that allows users to manage their job search in one place.
 
-Currently, two official plugins are available:
+## 🚀 Live Demo
+[Click here to view the live app](https://job-tracker-pi-flax.vercel.app/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+*Note: The backend is hosted on Render's free tier and may take 30-50 seconds to "wake up" on the first load. Please be patient!*
 
-## React Compiler
+## 🛠️ Tech Stack
+- **Frontend:** React, Vite, CSS
+- **Backend:** Node.js, Express
+- **Database:** PostgreSQL (hosted on Neon)
+- **Deployment:** Vercel (Frontend) + Render (Backend)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## ✨ Features
+- Add new job applications
+- Update application status (Applied, Interviewing, Offer, Rejected)
+- Delete applications
+- Real-time data persistence (data survives page refreshes)
+- Responsive design
 
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+## 💻 Running Locally
+1. Clone the repo
+2. Frontend: `cd job-tracker && npm install && npm run dev`
+3. Backend: `cd server && npm install && node index.js`
+4. Create a `.env` file in the `server` folder with your `DATABASE_URL`

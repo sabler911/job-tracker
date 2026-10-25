@@ -5,12 +5,16 @@ function App() {
   const [jobs, setJobs] = useState([])
   const [company, setCompany] = useState('')
   const [role, setRole] = useState('')
+  const [isLoading, setIsLoading] = useState(true)
 
   // Fetch jobs from the server when the page loads
   useEffect(() => {
     fetch('https://job-tracker-c4jo.onrender.com/api/jobs')
       .then((res) => res.json())
-      .then((data) => setJobs(data))
+      .then((data) => {
+        setJobs(data)
+        setIsLoading(false)
+      })
   }, [])
 
   async function handleSubmit(e) {
@@ -47,7 +51,7 @@ function App() {
     <div className="app">
       <header className="app-header">
         <h1>Job Tracker</h1>
-        <p>Tracking {jobs.length} applications</p>
+        {!isLoading && <p>Tracking {jobs.length} applications</p>}
       </header>
 
       <form className="job-form" onSubmit={handleSubmit}>
@@ -66,35 +70,41 @@ function App() {
         <button type="submit">Add Job</button>
       </form>
 
-      <main className="job-list">
-        {jobs.map((job) => (
-          <div key={job.id} className="job-card">
-            <div className="job-card-top">
-              <div>
-                <h2>{job.role}</h2>
-                <p>{job.company}</p>
+      {isLoading ? (
+        <p style={{ textAlign: 'center', color: '#666', marginTop: '40px' }}>
+          Loading your jobs... (Server may take 30s to wake up)
+        </p>
+      ) : (
+        <main className="job-list">
+          {jobs.map((job) => (
+            <div key={job.id} className="job-card">
+              <div className="job-card-top">
+                <div>
+                  <h2>{job.role}</h2>
+                  <p>{job.company}</p>
+                </div>
+                <button
+                  className="delete-btn"
+                  onClick={() => handleDelete(job.id)}
+                  aria-label="Delete job"
+                >
+                  ×
+                </button>
               </div>
-              <button
-                className="delete-btn"
-                onClick={() => handleDelete(job.id)}
-                aria-label="Delete job"
+              <select
+                className="status-select"
+                value={job.status}
+                onChange={(e) => handleStatusChange(job.id, e.target.value)}
               >
-                ×
-              </button>
+                <option value="Applied">Applied</option>
+                <option value="Interviewing">Interviewing</option>
+                <option value="Offer">Offer</option>
+                <option value="Rejected">Rejected</option>
+              </select>
             </div>
-            <select
-              className="status-select"
-              value={job.status}
-              onChange={(e) => handleStatusChange(job.id, e.target.value)}
-            >
-              <option value="Applied">Applied</option>
-              <option value="Interviewing">Interviewing</option>
-              <option value="Offer">Offer</option>
-              <option value="Rejected">Rejected</option>
-            </select>
-          </div>
-        ))}
-      </main>
+          ))}
+        </main>
+      )}
     </div>
   )
 }
